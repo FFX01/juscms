@@ -96,7 +96,31 @@ class Page(MPTTModel):
         return self.title
 
 
-class Row(models.Model)
+class Row(models.Model):
+    html_id = models.CharField(
+        verbose_name='HTML ID',
+        blank=True,
+        max_length=60,
+    )
+    html_class = models.CharField(
+        verbose_name='HTML Class',
+        blank=True,
+        max_length=120,
+    )
+    parent = models.ForeignKey(
+        Page,
+        verbose_name='Parent Page',
+        related_name='rows',
+        blank=False,
+        null=False,
+    )
+
+    class Meta:
+        verbose_name = 'Row'
+        verbose_name_plural = 'Rows'
+
+    def __str__(self):
+        return "Row ID:{0} - Parent Page:{1}" % (self.id, self.parent.title)
 
 
 @receiver(post_save, sender=Page)
