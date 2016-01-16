@@ -1,0 +1,5 @@
+<div {% if chunk.html_id %}id="{{chunk.html_id}}"{% endif %} {% if chunk.html_class %}class="{{chunk.html_class}}"{% endif %}>
+    {% if chunk.content %}
+        {{chunk.content|safe}}
+    {% endif %}
+</div>
