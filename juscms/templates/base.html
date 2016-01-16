@@ -1,0 +1,21 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    {% if instance.seo_title %}
+        <title>{{instance.seo_title}}</title>
+    {% endif %}
+    <meta charset="UTF-8">
+    {% if instance.seo_description %}
+        <meta name="description" content="{{instance.seo_description}}">
+    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+{% include 'header.html' %}
+{% block content %}
+{% endblock %}
+{% include 'footer.html' %}
+</body>
+</html>

@@ -96,7 +96,7 @@ class Page(MPTTModel):
         return self.title
 
 
-class Row(models.Model):
+class HTMLContent(models.Model):
     html_id = models.CharField(
         verbose_name='HTML ID',
         blank=True,
@@ -107,6 +107,12 @@ class Row(models.Model):
         blank=True,
         max_length=120,
     )
+
+    class Meta:
+        abstract = True
+
+
+class Row(HTMLContent):
     parent = models.ForeignKey(
         Page,
         verbose_name='Parent Page',
@@ -114,13 +120,49 @@ class Row(models.Model):
         blank=False,
         null=False,
     )
+    template = models.CharField(
+        verbose_name='HTML Template',
+        blank=False,
+        null=False,
+        max_length=300,
+        default='pages/row.html',
+    )
 
     class Meta:
         verbose_name = 'Row'
         verbose_name_plural = 'Rows'
 
     def __str__(self):
-        return "Row ID:{0} - Parent Page:{1}" % (self.id, self.parent.title)
+        return "Row ID:%d - Parent Page:%s" % (self.id, self.parent.title)
+
+
+class Chunk(HTMLContent):
+    parent = models.ForeignKey(
+        Row,
+        verbose_name='Parent Row',
+        related_name='chunks',
+        blank=False,
+        null=False,
+    )
+    template = models.CharField(
+        verbose_name='HTML Template',
+        blank=False,
+        null=False,
+        max_length=300,
+        default='pages/chunk.html',
+    )
+    content = models.TextField(
+        verbose_name='HTML Content',
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = 'Chunk'
+        verbose_name_plural = 'Chunks'
+
+    def __str__(self):
+        return "Chunk ID:%d - Parent Row:%d - Parent Page:%s" % \
+               (self.id, self.parent.id, self.parent.parent.title)
 
 
 @receiver(post_save, sender=Page)
@@ -134,7 +176,7 @@ def update_path(sender, instance, **kwargs):
             if instance.path != new_path:
                 instance.path = new_path
                 instance.save()
-            elif:
+            else:
                 pass
     else:
         instance.path = ''
