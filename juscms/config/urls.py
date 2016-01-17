@@ -18,6 +18,18 @@ from django.contrib import admin
 
 urlpatterns = [
     url(
+        r'^nested_admin/',
+        include(
+            'nested_admin.urls',
+        ),
+    ),
+    url(
+        r'^grappelli/',
+        include(
+            'grappelli.urls'
+        ),
+    ),
+    url(
         r'^admin/',
         admin.site.urls,
     ),
