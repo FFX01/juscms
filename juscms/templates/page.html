@@ -3,8 +3,8 @@
 {% block content %}
 <div class="container">
     {% if instance.rows %}
-        {% for row in instance.rows %}
-            {% include 'pages/row.html' row=row %}
+        {% for row in instance.rows.all %}
+            {% include 'pages/row.html' with row=row %}
         {% endfor %}
     {% endif %}
 </div>

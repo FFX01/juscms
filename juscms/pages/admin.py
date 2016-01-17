@@ -7,12 +7,10 @@ from .models import Page, Row, Chunk
 
 class ChunkInline(nested_admin.NestedStackedInline):
     model = Chunk
-    sortable_field_name = 'parent'
 
 
 class RowInline(nested_admin.NestedStackedInline):
     model = Row
-    sortable_field_name = 'parent'
     inlines = [
         ChunkInline,
     ]

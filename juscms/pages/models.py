@@ -66,7 +66,7 @@ class Page(MPTTModel):
         path = ''
         path_list = self.get_ancestors(include_self=True)
         for item in path_list:
-            path += item + '/'
+            path += item.slug + '/'
         return path
 
     def get_absolute_url(self):
@@ -83,14 +83,14 @@ class Page(MPTTModel):
             elif self.slug:
                 if self.slug != new_slug:
                     self.slug = new_slug
-            super(self, Page).save(*args, **kwargs)
+            super(Page, self).save(*args, **kwargs)
         else:
             current_home = Page.objects.filter(is_home=True)
             if current_home:
                 for item in current_home:
                     item.is_home = False
                     item.save()
-            super(self, Page).save(*args, **kwargs)
+            super(Page, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -133,7 +133,12 @@ class Row(HTMLContent):
         verbose_name_plural = 'Rows'
 
     def __str__(self):
-        return "Row ID:%d - Parent Page:%s" % (self.id, self.parent.title)
+        if not self.html_id and not self.html_class:
+            return "Row ID: %s" % self.id
+        elif self.html_id and not self.html_class:
+            return "Row - Id: %s" % self.html_id
+        elif self.html_id and self.html_class:
+            return "Row - Id: %s, Class: %s" % (self.html_id, self.html_class)
 
 
 class Chunk(HTMLContent):
@@ -161,8 +166,12 @@ class Chunk(HTMLContent):
         verbose_name_plural = 'Chunks'
 
     def __str__(self):
-        return "Chunk ID:%d - Parent Row:%d - Parent Page:%s" % \
-               (self.id, self.parent.id, self.parent.parent.title)
+        if not self.html_id and not self.html_class:
+            return "Row ID: %s" % self.id
+        elif self.html_id and not self.html_class:
+            return "Row - Id: %s" % self.html_id
+        elif self.html_id and self.html_class:
+            return "Row - Id: %s, Class: %s" % (self.html_id, self.html_class)
 
 
 @receiver(post_save, sender=Page)
