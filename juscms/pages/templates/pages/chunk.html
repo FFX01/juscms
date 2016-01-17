@@ -1,4 +1,4 @@
-<div {% if chunk.html_id %}id="{{chunk.html_id}}"{% endif %} {% if chunk.html_class %}class="{{chunk.html_class}}"{% endif %}>
+<div {% if chunk.html_ids %}id="{{chunk.html_ids}}"{% endif %} {% if chunk.html_class %}class="{{chunk.html_class}}"{% endif %}>
     {% if chunk.content %}
         {{chunk.content|safe}}
     {% endif %}

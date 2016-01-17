@@ -23,7 +23,6 @@ class Page(MPTTModel):
         verbose_name='Page URL Path',
         blank=True,
         max_length=800,
-        unique=True,
     )
     seo_title = models.CharField(
         verbose_name='Page SEO Title',
@@ -88,16 +87,23 @@ class Page(MPTTModel):
             current_home = Page.objects.filter(is_home=True)
             if current_home:
                 for item in current_home:
-                    item.is_home = False
-                    item.save()
-            super(Page, self).save(*args, **kwargs)
+                    if item != self:
+                        item.is_home = False
+                        item.save()
+                self.path = ''
+                self.parent = None
+                super(Page, self).save(*args, **kwargs)
+            else:
+                self.path = ''
+                self.parent = None
+                super(Page, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
 
 
 class HTMLContent(models.Model):
-    html_id = models.CharField(
+    html_ids = models.CharField(
         verbose_name='HTML ID',
         blank=True,
         max_length=60,
@@ -133,12 +139,12 @@ class Row(HTMLContent):
         verbose_name_plural = 'Rows'
 
     def __str__(self):
-        if not self.html_id and not self.html_class:
+        if not self.html_ids and not self.html_class:
             return "Row ID: %s" % self.id
-        elif self.html_id and not self.html_class:
-            return "Row - Id: %s" % self.html_id
-        elif self.html_id and self.html_class:
-            return "Row - Id: %s, Class: %s" % (self.html_id, self.html_class)
+        elif self.html_ids and not self.html_class:
+            return "Row - Id: %s" % self.html_ids
+        elif self.html_ids and self.html_class:
+            return "Row - Id: %s, Class: %s" % (self.html_ids, self.html_class)
 
 
 class Chunk(HTMLContent):
@@ -166,18 +172,20 @@ class Chunk(HTMLContent):
         verbose_name_plural = 'Chunks'
 
     def __str__(self):
-        if not self.html_id and not self.html_class:
-            return "Row ID: %s" % self.id
-        elif self.html_id and not self.html_class:
-            return "Row - Id: %s" % self.html_id
-        elif self.html_id and self.html_class:
-            return "Row - Id: %s, Class: %s" % (self.html_id, self.html_class)
+        if not self.html_ids and not self.html_class:
+            return "Chunk ID: %s" % self.id
+        elif self.html_ids and not self.html_class:
+            return "Chunk - Id: %s" % self.html_ids
+        elif self.html_ids and self.html_class:
+            return "Chunk - Id: %s, Class: %s" % (self.html_ids, self.html_class)
 
 
 @receiver(post_save, sender=Page)
 def update_path(sender, instance, **kwargs):
-    if not instance.is_home:
+    if instance.is_home is False:
         if not instance.path:
+            if instance.parent:
+                instance.move_to(instance.parent)
             instance.path = instance.build_path()
             instance.save()
         elif instance.path:
@@ -187,6 +195,3 @@ def update_path(sender, instance, **kwargs):
                 instance.save()
             else:
                 pass
-    else:
-        instance.path = ''
-        instance.save()
