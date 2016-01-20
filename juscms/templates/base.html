@@ -11,6 +11,11 @@
         <meta name="description" content="{{instance.seo_description}}">
     {% endif %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if instance.style %}
+        <style>
+            {{instance.style}}
+        </style>
+    {% endif %}
 </head>
 <body>
 {% include 'header.html' %}

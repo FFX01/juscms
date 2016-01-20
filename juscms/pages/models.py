@@ -41,6 +41,10 @@ class Page(MPTTModel):
             home page, the path attribute will be set to a blank string, and
             the parent attribute will be set to None. Any other page that has
             this attribute set to True will have is_home set to False.
+        style(string): This field is for adding additional custom CSS styling
+            to a specific page instance. This CSS will then be dynamically
+            inserted into the head element in 'base.html'. This ensures that
+            page specific style are not applied to the entire site.
     """
     title = models.CharField(
         verbose_name='Page Title',
@@ -86,6 +90,10 @@ class Page(MPTTModel):
         verbose_name='Set this page as home page?',
         help_text="This will override the current home page.",
         default=False,
+    )
+    style = models.TextField(
+        verbose_name='Page Specific CSS',
+        blank=True,
     )
 
     class Meta:
@@ -221,6 +229,8 @@ class Row(HTMLContent):
             return "Row ID: %s" % self.id
         elif self.html_ids and not self.html_class:
             return "Row - Id: %s" % self.html_ids
+        elif self.html_class and not self.html_ids:
+            return "Row - Class: %s" % self.html_class
         elif self.html_ids and self.html_class:
             return "Row - Id: %s, Class: %s" % (self.html_ids, self.html_class)
 
@@ -265,6 +275,8 @@ class Chunk(HTMLContent):
             return "Chunk ID: %s" % self.id
         elif self.html_ids and not self.html_class:
             return "Chunk - Id: %s" % self.html_ids
+        elif self.html_class and not self.html_ids:
+            return "Row - Class: %s" % self.html_class
         elif self.html_ids and self.html_class:
             return "Chunk - Id: %s, Class: %s" % (self.html_ids, self.html_class)
 
@@ -273,7 +285,7 @@ class Chunk(HTMLContent):
 def update_path(sender, instance, **kwargs):
     """
     This function listens to the save signal sent by a Page instance after it
-    has been created or modified and performers some logic to make sure that it
+    has been created or modified and performs some logic to make sure that it
     is callable by the view and sits correctly into the page tree.
     """
     if instance.is_home is False:
