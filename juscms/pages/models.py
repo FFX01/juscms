@@ -44,7 +44,7 @@ class Page(MPTTModel):
         style(string): This field is for adding additional custom CSS styling
             to a specific page instance. This CSS will then be dynamically
             inserted into the head element in 'base.html'. This ensures that
-            page specific style are not applied to the entire site.
+            page specific styles are not applied to the entire site.
     """
     title = models.CharField(
         verbose_name='Page Title',
