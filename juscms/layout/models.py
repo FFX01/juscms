@@ -24,18 +24,6 @@ class AbstractLayout(models.Model):
         blank=True,
         max_length=200,
     )
-    element_left = models.TextField(
-        verbose_name='Header Left',
-        blank=True,
-    )
-    element_center = models.TextField(
-        verbose_name='Header Center',
-        blank=True,
-    )
-    element_right = models.TextField(
-        verbose_name='Header Right',
-        blank=True,
-    )
 
     class Meta:
         abstract = True
