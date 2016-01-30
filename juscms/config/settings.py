@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'pages',
+    'layout',
+    'jusutils',
 
     'grappelli',
     'nested_admin',
