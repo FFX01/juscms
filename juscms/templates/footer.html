@@ -1,0 +1,11 @@
+{% if footer %}
+<div {% if footer.html_ids %}id="{{footer.html_ids}}"{% endif %} {% if footer.html_class %}class="{{footer.html_class}}"{% endif %}>
+    {% if footer.content %}
+        {{footer.content|safe}}
+    {% endif %}
+</div>
+{% else %}
+<div id="nofooter">
+    <h3>No footer</h3>
+</div>
+{% endif %}
