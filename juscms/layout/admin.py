@@ -6,7 +6,7 @@ from .models import Header, Footer
 
 
 @admin.register(Header)
-class HeaderAdmin(SingleInstanceAdminMixin, admin.ModelAdmin):
+class HeaderAdmin(admin.ModelAdmin, SingleInstanceAdminMixin):
     prepopulated_fields = {
         'slug': ('name',),
     }

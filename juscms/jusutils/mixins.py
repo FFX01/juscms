@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 
 
 class SingleInstanceMixin(object):
+    # TODO fix this method so creating a new header does not throw error
     """
     Mixin class to ensure only one instance of a particular model can be
     created.
@@ -13,8 +14,12 @@ class SingleInstanceMixin(object):
         exists, this method will throw a validation error.
         """
         model = self.__class__
-        if model.objects.count() > 0 and self.id != model.objects.get().id:
-            raise ValidationError('Can only create one %s' % model.__name__)
+        if model.objects.count() > 0:
+            if self.id:
+                if self.id != model.objects.get()[:1].id:
+                    raise ValidationError('Can only create one %s' % model.__name__)
+            else:
+                raise ValidationError('Can only create one %s' % model.__name__)
         super(SingleInstanceMixin, self).clean()
 
 
