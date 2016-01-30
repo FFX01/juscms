@@ -1,0 +1,11 @@
+{% if header %}
+<div {% if header.html_ids %}id="{{header.html_ids}}"{% endif %} {% if header.html_class %}class="{{header.html_class}}"{% endif %}>
+    {% if header.content %}
+        {{header.content|safe}}
+    {% endif %}
+</div>
+{% else %}
+<div id="noheader">
+    <h3>No Header</h3>
+</div>
+{% endif %}
