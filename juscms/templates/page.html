@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="page title">{{instance.title}}</div>
 <div class="container">
     {% if instance.rows %}
         {% for row in instance.rows.all %}
