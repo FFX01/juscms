@@ -14,7 +14,7 @@ class AbstractLayout(models.Model):
     Attributes:
         name(string): Display name.
         slug(string): Slug generated from 'name'. Used for reference.
-        html_ids(string): HTML ID as rtendered in the html template for a
+        html_ids(string): HTML ID as rendered in the html template for a
             layout object instance.
         html_class(string): HTML Class as used in the html template for this
             layout object instance.
@@ -58,16 +58,8 @@ class Header(SingleInstanceMixin, AbstractLayout):
     This model is used to manage the HTML header as rendered in the template.
 
     Attributes:
-        template(string): Path to Django template file used to render this
-            object instance.
+        content(string): HTML Content for the header section.
     """
-    template = models.CharField(
-        verbose_name='Template',
-        blank=False,
-        null=False,
-        max_length=250,
-        default='header.html',
-    )
     content = models.TextField(
         verbose_name='HTML Content',
         blank=True,
@@ -86,16 +78,8 @@ class Footer(SingleInstanceMixin, AbstractLayout):
     This model is used to manage the HTML footer as rendered in the template.
 
     Attributes:
-        template(string): Path to Django template file used to render this
-            object instance.
+        content(string): HTML content to be rendered as the footer.
     """
-    template = models.CharField(
-        verbose_name='Template',
-        blank=False,
-        null=False,
-        max_length=250,
-        default='footer.html',
-    )
     content = models.TextField(
         verbose_name='HTML Content',
         blank=True,

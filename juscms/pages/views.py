@@ -14,7 +14,7 @@ class BaseView(View):
             self(class): The class that calls this method. In this case it is
                 the baseview class.
             request(object): The http request object as received by the server
-                the client.
+                from the client.
             path(string): The path captured in the request url as defined in
                 pages/urls.py. This parameter is used to retrieve a page
                 instance to render.
