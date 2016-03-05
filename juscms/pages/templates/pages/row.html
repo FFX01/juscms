@@ -1,7 +1,7 @@
 <div {% if row.html_ids %}id="{{row.html_ids}}"{% endif %} {% if row.html_class %}class="{{row.html_class}}"{% endif %}>
     {% if row.chunks %}
         {% for chunk in row.chunks.all %}
-            {% include 'pages/chunk.html' with chunk=chunk%}
+            {% include 'pages/chunk.html' with chunk=chunk %}
         {% endfor %}
     {% endif %}
 </div>
